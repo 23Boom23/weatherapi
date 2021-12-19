@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, map, tap } from 'rxjs';
+import { map, tap } from 'rxjs';
+import { state } from '@angular/animations';
 
 @Component({
   selector: 'app-root',
@@ -10,8 +11,9 @@ import { BehaviorSubject, map, tap } from 'rxjs';
 export class AppComponent implements OnInit {
   title = 'weatherApi';
   cities: any;
-
-
+  temperature: any;
+  pressure: any;
+  humidity: any;
   constructor(private http: HttpClient) {}
 
   ngOnInit() {}
@@ -27,14 +29,34 @@ export class AppComponent implements OnInit {
       key: APIKey,
     };
 
-    const url = `${domain}${endpoint}`;
+    const url = `${domain}/${endpoint}`;
     this.http
       .get(url, { params: APIparams })
-      .pipe(map((res) => console.log(res)))
+      .pipe(map((res: any) => res.data.current))
       .subscribe((el: any) => {
         this.cities = el;
       });
   }
-}
 
-console.log(2 + 2);
+  onWeather() {
+    const domain = 'http://api.airvisual.com';
+    const endpoint = 'v2/city';
+    const APIKey = '7f7cc2ea-568f-4dae-9358-12518c1b7c7d';
+    const APIparams = {
+      city: 'Los Angeles',
+      state: 'California',
+      country: 'USA',
+      key: APIKey,
+    };
+
+    const url = `${domain}/${endpoint}`;
+    this.http
+      .get(url, { params: APIparams })
+      .pipe(map((res: any) => res.data.current.weather))
+      .subscribe((el: any) => {
+        this.temperature = el.tp;
+        this.humidity = el.humidity;
+        this.pressure = el.pressure;
+      });
+  }
+}
