@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map, tap } from 'rxjs';
+import { BehaviorSubject, map, tap } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -10,6 +10,7 @@ import { map, tap } from 'rxjs';
 export class AppComponent implements OnInit {
   title = 'weatherApi';
   cities: any;
+
 
   constructor(private http: HttpClient) {}
 
